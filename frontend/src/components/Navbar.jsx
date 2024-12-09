@@ -5,6 +5,8 @@ import Menu from "./menu";
 import { UserContext } from "../context/UserContext";
 const Navbar = () => {
   const [menu,setMenu] = useState(false)
+  const [search,setSearch] = useState('')
+  console.log(search)
 
   const showMenu = () => {
     setMenu(!menu)
@@ -15,8 +17,8 @@ const Navbar = () => {
       <h1 className="text-lg md:text-xl font-extrabold"><Link to="/">Blog Market</Link></h1>
 
       <div className="flex justify-center items-center space-x-1">
-      <p><FaSearch /></p>
-      <input className="text-center outline-none px-3 border border-gray-300 rounded-md" placeholder="search" type="text"/>
+      <p className="cursor-pointer"><FaSearch /></p>
+      <input onChange={(e)=>setSearch(e.target.value)} className="text-center outline-none px-3 border border-gray-300 rounded-md" placeholder="search" type="text"/>
       </div>
 
       <div className="hidden md:flex items-center justify-center space-x-2 md:space-x-4">

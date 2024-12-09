@@ -44,4 +44,15 @@ export const loggedIn = async () => {
     return response.data
 }
 
+//Logout
+export const logout = async () => {
+    try{
+        const response = await api.get("/auth/logout",{withCredentials:true})
+        return response.data
+    }catch(err){
+        console.log("Error logging out", err)
+        throw err
+    }
+}
+
 export default api

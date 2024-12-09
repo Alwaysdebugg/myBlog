@@ -1,30 +1,15 @@
-import { useState,useEffect } from 'react'
-import { fetchBlogPosts } from '../services/api'
+/* eslint-disable react/prop-types */
 
-const HomePosts = () => {
-  const [blogList,setBlogList] = useState([])
+const HomePosts = ({blog}) => {
 
-  useEffect(()=>{
-    const fetchPosts = async()=>{
-      try{
-        const res = await fetchBlogPosts()
-        setBlogList(res)
-      }catch(err){
-        console.log("Error fetching blog posts", err)
-      }
-    }
-    fetchPosts()
-  },[])
-
-  if(blogList.length === 0) return <div className="flex justify-center items-center h-[30vh]">Loading...</div>
+  if(!blog) return <div className="flex justify-center items-center h-[30vh]">Loading...</div>
 
   return (
     <div className="w-full flex mt-8 space-x-4">
-      { Array.isArray(blogList) && blogList.length > 0 &&blogList.map((blog, index) => (
-        <div key={index} className="flex w-full">
+        <div className="flex w-full space-x-4">
           <div className="w-[35%] h-[200px] flex justify-center items-center">
             <img 
-              src={blog.image} 
+              src={blog.photo} 
               alt={blog.title}
               className="h-full w-full object-cover"
             />
@@ -34,16 +19,24 @@ const HomePosts = () => {
               {blog.title}
             </h1>
             <div className="flex mb-2 text-sm font-semibold text-gray-500 items-center justify-between md:mb-4">
-              <p>{blog.author}</p>
+              <p>@{blog.username}</p>
               <div className="flex space-x-2">
-                <p>{blog.createdAt}</p>
-                <p>{blog.time}</p>
+                <p>{new Date(blog.updatedAt).toString().slice(0,15)}</p>
+                <p>{new Date(blog.updatedAt).toString().slice(16,24)}</p>
               </div>
             </div>
-            <p className="text-sm md:text-lg">{blog.content}</p>
+            <p className="text-sm md:text-lg overflow-hidden text-ellipsis" 
+               style={{ 
+                 display: '-webkit-box', 
+                 WebkitLineClamp: 3, 
+                 WebkitBoxOrient: 'vertical', 
+                 overflow: 'hidden' 
+               }}>
+              {blog.desc}
+            </p>
           </div>
         </div>
-      ))}
+
     </div>
   )
 }

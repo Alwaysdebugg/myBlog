@@ -44,7 +44,7 @@ router.post('/login', async (req, res) => {
         const match = await bcrypt.compare(req.body.password,user.password)
 
         if(!match){
-            return res.status(401).json({msg:"wrong password", password: req.body.password,userPassword:user.password,match:match,user:user})
+            return res.status(401).json({msg:"wrong password", password:req.body.password,userPassword:user.password,match:match,user:user})
         }
 
         const token = jwt.sign({id:user._id,username:user.username,email:user.email},process.env.JWT_SECRET,{expiresIn:"3d"})
@@ -60,16 +60,20 @@ router.post('/login', async (req, res) => {
 
 
 //LOGOUT
-// 用户注销路由
-router.post('/logout', (req, res) => {
+router.get('/logout', (req, res) => {
     // 清除身份验证令牌的 cookie
-    res.clearCookie("token", {
-        sameSite: "none", // 允许跨站请求发送 cookie
-        secure: true      // 仅在 HTTPS 连接上发送 cookie
-    })
-    .status(200) // 设置响应状态码为 200
-    .json({ msg: "Logout successfully" }); // 返回成功消息
+    try{
+        res.clearCookie("token", {
+            sameSite: "none", // 允许跨站请求发送 cookie
+            secure: true      // 仅在 HTTPS 连接上发送 cookie
+        })
+        res.status(200).json({ msg: "Logout successfully" }); // 返回成功消息
+    }
+    catch(err){
+        res.status(500).json(err)
+    }
 });
+
 
 //REFETCH USER
 router.get("/refetch",(req,res)=>{
