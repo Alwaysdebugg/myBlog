@@ -1,38 +1,69 @@
 import Navbar from "../components/Navbar"
 import Footer from '../components/Footer'
 import Comment from "../components/Comment"
-import {BiEdit} from 'react-icons/bi'
-import {MdDelete} from 'react-icons/md'
+import { BiEdit } from 'react-icons/bi'
+import { MdDelete } from 'react-icons/md'
+import { fetchBlogPostById } from "../services/api"
+import { useParams } from "react-router-dom"
+import { useEffect,useState,useContext } from "react"
+import { UserContext } from "../context/UserContext"
+import Loader from "../components/Loader"
 
 const PostDetails = () => {
+  const {id:postId} = useParams()
+  console.log('postId',postId)
+  const [postDetails,setPostDetails] = useState({})
+  const {user} = useContext(UserContext)
+  const [loading,setLoading] = useState(true)
+  const fetchPost = async()=>{
+    setLoading(true)
+    try{
+      const res = await fetchBlogPostById(postId)
+      console.log('postDetails',res)
+      setPostDetails(res)
+      setLoading(false)
+    }catch(err){
+      setLoading(true)
+      console.log('Error fetching post details',err)
+    }
+  }
+  useEffect(()=>{
+    fetchPost()
+  },[postId])
   return (
     <div>
       <Navbar/>
+      {loading? <div className="flex justify-center items-center h-[80vh] w-full"><Loader/></div>:
       <div className="px-8 md:px-[200px] mt-8">
         <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-black md:text-3xl">10 challenges of machine learning</h1>
+            <h1 className="text-2xl font-bold text-black md:text-3xl">{postDetails.title}</h1>
+            {user && user.id === postDetails.userId && (
             <div className="flex items-center justify-center space-x-2">
                 <p><BiEdit/></p>
                 <p><MdDelete/></p>
             </div>
+            )}
         </div>
         <div className="flex items-center justify-between mt-2 md:mt-4">
-            <p>@jacky</p>
+            <p>@{postDetails.username}</p>
             <div className="flex space-x-2">
-                <p>16/06/2023</p>
-                <p>16:45</p>
+            <p>{new Date(postDetails.updatedAt).toString().slice(0,15)}</p>
+            <p>{new Date(postDetails.updatedAt).toString().slice(16,24)}</p>
             </div>
         </div>
-        <img src="https://images.pexels.com/photos/267569/pexels-photo-267569.jpeg?auto=compress&cs=tinysrgb&w=600" 
-            alt="" 
-            className="w-[20%] h-[20%] md:w-[50%] mt-8"
+        <img src={postDetails.photo} 
+            alt={postDetails.title} 
+            className="w-[20%] h-[20%] md:w-[30%] mt-8"
         />
-        <p className="mx-auto mt-8">Are you looking for an easy guide on how to start a blog?The step-by-step guide on this page will show you how to create a blog in 20 minutes with just the most basic computer skills.After completing this guide you will have a beautiful blog that is ready to share with the world.This guide is made especially for beginners. I will walk you through each and every step, using plenty of pictures and videos to make it all perfectly clear.If you get stuck or have questions at any point, simply send me a message and I will do my best to help you out.</p>
+        <p className="mx-auto mt-8">{postDetails.desc}</p>
         <div className="flex items-center mt-8 space-x-4 font-semibold">
             <p>Categories:</p>
             <div className="flex justify-center items-center space-x-2">
-                <div className="bg-gray-400 rounded-lg px-3 py-1">Tech</div>
-                <div className="bg-gray-400 rounded-lg px-3 py-1">Life</div>
+              { postDetails.categories && postDetails.categories.map((category,index)=>(
+                <div className="bg-gray-400 rounded-lg px-3 py-1" key={index}>
+                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                </div>
+              ))}
             </div>
         </div>
         <div className="flex flex-col mt-4 space-y-2">
@@ -48,6 +79,7 @@ const PostDetails = () => {
           <button className="px-4 py-2 bg-black text-sm text-white rounded-lg hover:bg-slate-500 md:w-[20%] mt-4 md:mt-0">Add Comment</button>
         </div>
       </div>
+      }
       <Footer/>
     </div>
   )

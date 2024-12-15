@@ -37,7 +37,7 @@ router.get('/:id',async(req,res)=>{
     }
 })
 
-//Get posts
+//Get All posts
 router.get('/',async(req,res)=>{
     const query = req.query
     try{

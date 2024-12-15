@@ -1,11 +1,16 @@
 import Footer from "../components/Footer"
 import Navbar from "../components/Navbar"
 import {ImCross} from 'react-icons/im'
-import { useState } from 'react';
+import { useState,useContext } from 'react';
+import { UserContext } from "../context/UserContext";
+import { createBlogContent,uploadImage } from "../services/api";
+
 
 const CreatePost = () => {
     const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+    const [desc, setDesc] = useState('');
+    const [file, setFile] = useState(null);
+    const {user} = useContext(UserContext)
     const [status, setStatus] = useState('');
     const [cat, setCat] = useState('');
     const [cats, setCatList] = useState([]);
@@ -23,18 +28,43 @@ const CreatePost = () => {
         updatedCats.splice(i)
         setCatList(updatedCats)
     }
+  
+    const handleCreate = async(e)=>{
+        e.preventDefault()
+        const post = {
+            title,
+            desc,
+            username:user.username,
+            userId:user.id,
+            categories:cats
+        }
+        if(file){
+            const formData = new FormData()
+            const filename = Date.now() + file.name
+            formData.append('img',filename)
+            formData.append('file',file)
+            post.photo = filename
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Simulate upload logic
-        setStatus('Uploading...');
-        setTimeout(() => {
-          setStatus('Upload successful!');
-          setTitle('');
-          setContent('');
-        }, 2000);
-    };
+            //img upload
+            try{
+              const imgUpload = await uploadImage(formData)
+              post.photo = imgUpload.filename
+              console.log(imgUpload.FormData)
+            }catch(err){
+                console.log('Error creating post',err)
+            }
 
+        }
+        //blog-content-upload
+        try{
+            const res = await createBlogContent(post)
+            console.log('res',res)
+            setStatus('Post created successfully')
+        }catch(err){
+            console.log('Error creating post',err)
+            setStatus('Error creating post')
+        }
+    }
     
   return (
     <div>
@@ -43,7 +73,7 @@ const CreatePost = () => {
         <div className="flex justify-center items-center">
             <h1 className="font-bold md:text-2xl text-xl">Something New?</h1>
         </div>
-        <form onSubmit={handleSubmit} className="w-full flex flex-col space-y-4 md:space-y-8 mt-4">
+        <form onSubmit={handleCreate} className="w-full flex flex-col space-y-4 md:space-y-8 mt-4">
         <div className="mb-4">
         <input
           type="text"
@@ -59,14 +89,14 @@ const CreatePost = () => {
         <textarea
           id="content"
           placeholder="Content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-md"
           rows="6"
           required
         ></textarea>
         </div>
-        <input type="file" name="" id=""/>
+        <input onChange={(e)=>setFile(e.target.files[0])} type="file" className="w-full px-3 py-2 border border-gray-300 rounded-md"/>
         <div className="flex flex-row items-center py-2 space-x-2">
             <input value={cat} onChange={(e)=>setCat(e.target.value)} type="text" placeholder="category" className="w-[50%] px-3 py-2 border border-gray-300 rounded-md"/>
             <div onClick={addCategory} required className="px-2 py-1 rounded-md bg-black text-white">+</div>

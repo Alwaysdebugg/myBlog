@@ -27,13 +27,24 @@ export const register = async (username,email,password) => {
 }
 
 
-// get Blog Posts
-export const fetchBlogPosts = async () => {
+// Get Blog Posts
+export const fetchBlogPosts = async (search) => {
     try{
-        const response = await api.get("/posts")
+        const response = await api.get("/posts",{params:{search}})
         return response.data
     }catch(error){
         console.error("Error fetching blog posts", error)
+        throw error
+    }
+}
+
+// Get Blog Post by ID
+export const fetchBlogPostById = async (id) => {
+    try{
+        const response = await api.get(`/posts/${id}`)
+        return response.data
+    }catch(error){
+        console.error("Error fetching blog post by id", error)
         throw error
     }
 }
@@ -42,6 +53,27 @@ export const fetchBlogPosts = async () => {
 export const loggedIn = async () => {
     const response = await api.get("/auth/refetch",{withCredentials:true})
     return response.data
+}
+
+//Create Blog content
+export const createBlogContent = async (post) => {
+    try{
+        const response = await api.post("/posts/create",post,{withCredentials:true})
+        return response.data
+    }catch(error){
+        console.error("Error creating blog content", error)
+        throw error
+    }
+}
+// Upload Image
+export const uploadImage = async (file) => {
+    try{
+        const response = await api.post("/upload",file,{withCredentials:true})
+        return response.data
+    }catch(error){
+        console.error("Error uploading image", error)
+        throw error
+    }
 }
 
 //Logout
