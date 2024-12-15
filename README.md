@@ -1,1 +1,2 @@
-This is a Blog website, but I am still developping it.
+This is a Blog app (Medium clone)
+Still working on it......
