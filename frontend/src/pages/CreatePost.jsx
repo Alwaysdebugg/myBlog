@@ -4,7 +4,7 @@ import {ImCross} from 'react-icons/im'
 import { useState,useContext } from 'react';
 import { UserContext } from "../context/UserContext";
 import { createBlogContent,uploadImage } from "../services/api";
-
+import { useNavigate } from 'react-router-dom';
 
 const CreatePost = () => {
     const [title, setTitle] = useState('');
@@ -14,6 +14,7 @@ const CreatePost = () => {
     const [status, setStatus] = useState('');
     const [cat, setCat] = useState('');
     const [cats, setCatList] = useState([]);
+    const navigate = useNavigate()
 
     const addCategory=()=>{
         let updatedCats = [...cats]
@@ -35,7 +36,7 @@ const CreatePost = () => {
             title,
             desc,
             username:user.username,
-            userId:user.id,
+            userId:user._id,
             categories:cats
         }
         if(file){
@@ -47,9 +48,7 @@ const CreatePost = () => {
 
             //img upload
             try{
-              const imgUpload = await uploadImage(formData)
-              post.photo = imgUpload.filename
-              console.log(imgUpload.FormData)
+                await uploadImage(formData)
             }catch(err){
                 console.log('Error creating post',err)
             }
@@ -58,10 +57,11 @@ const CreatePost = () => {
         //blog-content-upload
         try{
             const res = await createBlogContent(post)
-            console.log('res',res)
+            navigate("/posts/post/"+res._id)
+            // console.log('res',res)
             setStatus('Post created successfully')
         }catch(err){
-            console.log('Error creating post',err)
+            console.log(err)
             setStatus('Error creating post')
         }
     }

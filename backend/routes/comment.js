@@ -6,6 +6,7 @@ const verifyToken = require('../verifyToken')
 //Create comment
 router.post('/create',verifyToken,async(req,res)=>{
     const newComment = new Comment(req.body)
+    console.log('newComment',newComment)
     try{
         const savedComment = await newComment.save()
         res.status(200).json(savedComment)

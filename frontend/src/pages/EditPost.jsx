@@ -1,21 +1,31 @@
 import Footer from "../components/Footer"
 import Navbar from "../components/Navbar"
 import {ImCross} from 'react-icons/im'
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
+import { updateBlogPostById } from "../services/api";
+import { useParams } from "react-router-dom";
+import { fetchBlogPostById } from "../services/api";
+import { uploadImage } from "../services/api";
+import { useNavigate } from "react-router-dom";
+
 
 const EditPost = () => {
+  const {id:postId} = useParams()
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [desc, setDesc] = useState('');
+  const [file,setFile] = useState(null)
   const [status, setStatus] = useState('');
   const [cat, setCat] = useState('');
   const [cats, setCatList] = useState([]);
+  const navigate = useNavigate()
 
   const addCategory=()=>{
       let updatedCats = [...cats]
-      if(cat != "")
-      updatedCats.push(cat)
-      setCat("")
-      setCatList(updatedCats)
+      if(cat != ""){
+        updatedCats.push(cat)
+        setCat("")
+        setCatList(updatedCats)
+      }
   };
 
   const deleteCategory=(i)=>{
@@ -24,16 +34,53 @@ const EditPost = () => {
       setCatList(updatedCats)
   }
 
-  const handleSubmit = (e) => {
-      e.preventDefault();
-      // Simulate upload logic
-      setStatus('Uploading...');
-      setTimeout(() => {
-        setStatus('Upload successful!');
-        setTitle('');
-        setContent('');
-      }, 2000);
+  const fetchPost = async()=>{
+    try{
+      const res = await fetchBlogPostById(postId)
+      setTitle(res.title)
+      setDesc(res.desc)
+      setCatList(res.categories)
+    }catch(err){
+      console.log(err)
+    }
+  }
+
+  const handleUpdate = async(e) => {
+    e.preventDefault()
+    const post = {
+        title,
+        desc,
+        categories:cats
+    }
+    if(file){
+        const formData = new FormData()
+        const filename = Date.now() + file.name
+        formData.append('img',filename)
+        formData.append('file',file)
+        post.photo = filename
+
+        //img upload update
+        try{
+            await uploadImage(formData)
+        }catch(err){
+            console.log('Error updating post',err)
+        }
+
+    }
+    //blog-content-update
+    try{
+        const res = await updateBlogPostById(postId,post)
+        navigate("/posts/post/"+res._id)
+        setStatus('Post updated successfully')
+    }catch(err){
+        console.log(err)
+        setStatus('Error updating post')
+    }
   };
+
+  useEffect(()=>{
+    fetchPost()
+  },[postId])
   
   return (
     <div>
@@ -42,7 +89,7 @@ const EditPost = () => {
         <div className="flex justify-center items-center">
             <h1 className="font-bold md:text-2xl text-xl">Update A Post</h1>
         </div>
-        <form onSubmit={handleSubmit} className="w-full flex flex-col space-y-4 md:space-y-8 mt-4">
+        <form onSubmit={handleUpdate} className="w-full flex flex-col space-y-4 md:space-y-8 mt-4">
         <div className="mb-4">
         <input
           type="text"
@@ -58,14 +105,14 @@ const EditPost = () => {
         <textarea
           id="content"
           placeholder="Content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-md"
           rows="6"
           required
         ></textarea>
         </div>
-        <input type="file" name="" id=""/>
+        <input onChange={(e)=>setFile(e.target.files[0])} type="file" className="w-full px-3 py-2 border border-gray-300 rounded-md"/>
         <div className="flex flex-row items-center py-2 space-x-2">
             <input value={cat} onChange={(e)=>setCat(e.target.value)} type="text" placeholder="category" className="w-[50%] px-3 py-2 border border-gray-300 rounded-md"/>
             <div onClick={addCategory} required className="px-2 py-1 rounded-md bg-black text-white">+</div>

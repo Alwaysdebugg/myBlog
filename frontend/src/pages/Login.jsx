@@ -11,14 +11,14 @@ const Login = () => {
   const navigate = useNavigate()
   const {setUser} = useContext(UserContext)
   
-  const handleLogin = async()=>{
+  const handleLogin = async(event)=>{
     try{
       event.preventDefault()
       const res = await login(email,password)   
       localStorage.setItem("token", res.token)
       setUser(res)
       navigate("/")
-      console.log(res,"login")
+      console.log(res,"login_token")
     }catch(err){
       console.log("Error logging in", err)
       setError(true)

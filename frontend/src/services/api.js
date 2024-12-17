@@ -26,7 +26,6 @@ export const register = async (username,email,password) => {
     }
 }
 
-
 // Get Blog Posts
 export const fetchBlogPosts = async (search) => {
     try{
@@ -65,13 +64,63 @@ export const createBlogContent = async (post) => {
         throw error
     }
 }
+
 // Upload Image
 export const uploadImage = async (file) => {
     try{
-        const response = await api.post("/upload",file,{withCredentials:true})
+        const response = await api.post("/upload",file)
         return response.data
     }catch(error){
         console.error("Error uploading image", error)
+        throw error
+    }
+}
+
+//Delete Blog Post
+export const deleteBlogPostById = async (id) => {
+    try{
+        const response = await api.delete(`/posts/${id}`,{withCredentials:true})
+        return response.data
+    }catch(error){
+        console.error("Error deleting blog post", error)
+        throw error
+    }
+}
+
+//Update Blog Post
+export const updateBlogPostById = async (id,post) => {
+    try{
+        const response = await api.put(`/posts/${id}`,post,{withCredentials:true})
+        return response.data
+    }catch(error){
+        console.error("Error updating blog post", error)
+        throw error
+    }
+}
+
+//Get Comments by Post ID
+export const fetchCommentsByPostId = async (id) => {
+    try{
+        const response = await api.get(`/comments/post/${id}`)
+        return response.data
+    }catch(error){
+        console.error("Error fetching comments by post id", error)
+        throw error
+    }
+}
+
+//Post Comment
+export const postComment = async (postId,comment,author,userId) => {
+    try{
+        const response = await api.post("/comments/create",{
+            postId,
+            comment,
+            author,
+            userId
+        },{withCredentials:true})
+        return response.data
+    }catch(error){
+        console.error("Error posting comment", error)
         throw error
     }
 }

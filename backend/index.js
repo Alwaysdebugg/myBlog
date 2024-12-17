@@ -8,6 +8,8 @@ const postsRoute=require('./routes/posts')
 const commentRoute=require('./routes/comment')
 const cookieParser = require('cookie-parser')
 const multer = require('multer')
+const path = require('path')
+
 
 //database
 const connectDB=async()=>{
@@ -25,6 +27,7 @@ const connectDB=async()=>{
 dotenv.config() //加载环境变量 .env
 app.use(express.json())
 app.use(cookieParser())
+app.use("/images",express.static(path.join(__dirname,"/images")))
 app.use("/api/auth",authRoute)
 app.use("/api/users",usersRoute)
 app.use("/api/posts",postsRoute)

@@ -8,27 +8,62 @@ import { useParams } from "react-router-dom"
 import { useEffect,useState,useContext } from "react"
 import { UserContext } from "../context/UserContext"
 import Loader from "../components/Loader"
+import { IF } from "../url"
+import { useNavigate } from "react-router-dom"
+import { deleteBlogPostById } from "../services/api"
+import { fetchCommentsByPostId,postComment } from "../services/api"
 
 const PostDetails = () => {
   const {id:postId} = useParams()
-  console.log('postId',postId)
   const [postDetails,setPostDetails] = useState({})
   const {user} = useContext(UserContext)
   const [loading,setLoading] = useState(true)
+  const [commentList,setCommentList] = useState([])
+  const [comment,setComment] = useState('')
+  const navigate = useNavigate()
   const fetchPost = async()=>{
     setLoading(true)
     try{
       const res = await fetchBlogPostById(postId)
-      console.log('postDetails',res)
       setPostDetails(res)
       setLoading(false)
     }catch(err){
       setLoading(true)
-      console.log('Error fetching post details',err)
+      throw err
     }
   }
+  const fetchComments = async()=>{
+    try{
+      const res = await fetchCommentsByPostId(postId)
+      setCommentList(res)
+      console.log(res,"comments")
+    }catch(err){
+      console.log(err)
+    }
+  }
+  const handlePostComment = async()=>{
+    try{
+      const res = await postComment({postId:postId,comment:comment,author:user.username,userId:user._id})
+      setCommentList([...commentList,res])
+      console.log(res,"comment posted successfully")
+      setComment('')
+    }catch(err){
+      console.log(err)
+    }
+  }
+
+  const deletePost = async(id)=>{
+    try{
+      await deleteBlogPostById(id)
+      navigate('/')
+    }catch(err){
+      console.log(err)
+    }
+  }
+  
   useEffect(()=>{
     fetchPost()
+    fetchComments()
   },[postId])
   return (
     <div>
@@ -37,10 +72,10 @@ const PostDetails = () => {
       <div className="px-8 md:px-[200px] mt-8">
         <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold text-black md:text-3xl">{postDetails.title}</h1>
-            {user && user.id === postDetails.userId && (
+            {user && user._id === postDetails.userId && (
             <div className="flex items-center justify-center space-x-2">
-                <p><BiEdit/></p>
-                <p><MdDelete/></p>
+                <p className="cursor-pointer" onClick={()=>navigate("/edit/"+postId)}><BiEdit/></p>
+                <p className="cursor-pointer" onClick={()=>deletePost(postId)}><MdDelete/></p>
             </div>
             )}
         </div>
@@ -51,7 +86,7 @@ const PostDetails = () => {
             <p>{new Date(postDetails.updatedAt).toString().slice(16,24)}</p>
             </div>
         </div>
-        <img src={postDetails.photo} 
+        <img src={IF+postDetails.photo} 
             alt={postDetails.title} 
             className="w-[20%] h-[20%] md:w-[30%] mt-8"
         />
@@ -68,15 +103,13 @@ const PostDetails = () => {
         </div>
         <div className="flex flex-col mt-4 space-y-2">
           <h3 className="mt-6 mb-4 font-semibold">Comments:</h3>
-          {/* comments: */}
-          {/* Two mock comments */}
-          <Comment/>
-          <Comment/>
+          {commentList.length > 0 ? commentList.map((comment)=>(
+            <Comment key={comment._id} comment={comment}/>
+          )) : <p className="text-gray-500">No comments yet</p>}
         </div>
-        {/* Write a comment */}
         <div className="w-full flex flex-col mt-4 md:flex-row">
-          <input type="text" placeholder="Write a comment" className="md:w-[80%] outline-none px-4 mt-4 md:mt-0"/>
-          <button className="px-4 py-2 bg-black text-sm text-white rounded-lg hover:bg-slate-500 md:w-[20%] mt-4 md:mt-0">Add Comment</button>
+          <input onChange={(e)=>setComment(e.target.value)} type="text" placeholder="Write a comment" className="md:w-[80%] outline-none px-4 mt-4 md:mt-0"/>
+          <button onClick={handlePostComment} className="px-4 py-2 bg-black text-sm text-white rounded-lg hover:bg-slate-500 md:w-[20%] mt-4 md:mt-0">Add Comment</button>
         </div>
       </div>
       }
