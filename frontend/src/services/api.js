@@ -110,12 +110,12 @@ export const fetchCommentsByPostId = async (id) => {
 }
 
 //Post Comment
-export const postComment = async (postId,comment,author,userId) => {
+export const postComment = async (comment,author,postId,userId) => {
     try{
         const response = await api.post("/comments/create",{
-            postId,
             comment,
             author,
+            postId,
             userId
         },{withCredentials:true})
         return response.data

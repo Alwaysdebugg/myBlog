@@ -33,9 +33,11 @@ const PostDetails = () => {
     }
   }
   const fetchComments = async()=>{
+    setLoading(true)
     try{
       const res = await fetchCommentsByPostId(postId)
       setCommentList(res)
+      setLoading(false)
       console.log(res,"comments")
     }catch(err){
       console.log(err)
@@ -43,10 +45,9 @@ const PostDetails = () => {
   }
   const handlePostComment = async()=>{
     try{
-      const res = await postComment({postId:postId,comment:comment,author:user.username,userId:user._id})
-      setCommentList([...commentList,res])
+      const res = await postComment(comment, user.username, postId, user._id)
       console.log(res,"comment posted successfully")
-      setComment('')
+      fetchComments()
     }catch(err){
       console.log(err)
     }
