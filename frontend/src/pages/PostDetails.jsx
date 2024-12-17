@@ -66,6 +66,11 @@ const PostDetails = () => {
     fetchPost()
     fetchComments()
   },[postId])
+
+  const removeCommentFromList = (commentId) => {
+    setCommentList((prevComments) => prevComments.filter(comment => comment._id !== commentId));
+  };
+
   return (
     <div>
       <Navbar/>
@@ -105,7 +110,7 @@ const PostDetails = () => {
         <div className="flex flex-col mt-4 space-y-2">
           <h3 className="mt-6 mb-4 font-semibold">Comments:</h3>
           {commentList.length > 0 ? commentList.map((comment)=>(
-            <Comment key={comment._id} comment={comment}/>
+            <Comment key={comment._id} comment={comment} onDelete={removeCommentFromList} />
           )) : <p className="text-gray-500">No comments yet</p>}
         </div>
         <div className="w-full flex flex-col mt-4 md:flex-row">

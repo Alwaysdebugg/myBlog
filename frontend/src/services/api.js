@@ -98,6 +98,8 @@ export const updateBlogPostById = async (id,post) => {
     }
 }
 
+//Comments
+
 //Get Comments by Post ID
 export const fetchCommentsByPostId = async (id) => {
     try{
@@ -121,6 +123,17 @@ export const postComment = async (comment,author,postId,userId) => {
         return response.data
     }catch(error){
         console.error("Error posting comment", error)
+        throw error
+    }
+}
+
+//Delete Comment
+export const deleteComment = async (id) => {
+    try{
+        const response = await api.delete(`/comments/${id}`,{withCredentials:true})
+        return response.data
+    }catch(error){
+        console.error("Error deleting comment", error)
         throw error
     }
 }
