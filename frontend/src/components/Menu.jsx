@@ -17,7 +17,7 @@ const Menu = () => {
         }
     }
     return (
-        <div className="bg-black w-[200px] flex flex-col items-start absolute top-12 right-0 p-4 md:right-32 rounded-lg space-y-4">
+        <div className="bg-black w-[100px] flex flex-col items-start absolute top-8 right-16 p-4 md:right-20 rounded-lg space-y-4">
             {!user && <h3 className="text-white text-sm hover:text-gray-400 cursor-pointer" onClick={()=>navigate('/login')}>Login</h3>}
             {!user && <h3 className="text-white text-sm hover:text-gray-400 cursor-pointer" onClick={()=>navigate('/register')}>Register</h3>}
             {user && <h3 className="text-white text-sm hover:text-gray-400 cursor-pointer" onClick={()=>navigate('/write')}>Write</h3>}
