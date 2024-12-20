@@ -71,7 +71,7 @@ const CreatePost = () => {
         <Navbar/>
         <div className="px-6 md:px-[200px] mt-8">
         <div className="flex justify-center items-center">
-            <h1 className="font-bold md:text-2xl text-xl">Something New?</h1>
+            <h1 className="font-bold md:text-2xl text-xl font-serif">Something New?</h1>
         </div>
         <form onSubmit={handleCreate} className="w-full flex flex-col space-y-4 md:space-y-8 mt-4">
         <div className="mb-4">
@@ -81,7 +81,7 @@ const CreatePost = () => {
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          className="w-[90%] md:w-[30%] px-4 py-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
           required
         />
         </div>
@@ -91,14 +91,28 @@ const CreatePost = () => {
           placeholder="Content"
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          className="w-full px-4 py-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
           rows="6"
           required
         ></textarea>
         </div>
-        <input onChange={(e)=>setFile(e.target.files[0])} type="file" className="w-full px-3 py-2 border border-gray-300 rounded-md"/>
+        <div className="mb-4">
+          <input
+            type="file"
+            id="fileInput"
+            onChange={(e) => setFile(e.target.files[0])}
+            className="hidden"
+          />
+          <label
+            htmlFor="fileInput"
+            className="w-[90%] md:w-[50%] px-4 py-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-white cursor-pointer"
+          >
+            Choose File
+          </label>
+          {file && <span className="ml-2">{file.name}</span>}
+        </div>
         <div className="flex flex-row items-center py-2 space-x-2">
-            <input value={cat} onChange={(e)=>setCat(e.target.value)} type="text" placeholder="category" className="w-[50%] px-3 py-2 border border-gray-300 rounded-md"/>
+            <input value={cat} onChange={(e)=>setCat(e.target.value)} type="text" placeholder="category" className="w-[60%] md:w-[30%] px-4 py-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"/>
             <div onClick={addCategory} required className="px-2 py-1 rounded-md bg-black text-white">+</div>
         </div>
         {/* category display */}
@@ -112,9 +126,9 @@ const CreatePost = () => {
         </div>
         <button
         type="submit"
-        className="w-[50%] md:w-[30%] py-2 bg-black text-white rounded-lg hover:bg-slate-500 focus:outline-none mx-auto"
+        className="w-[100px] md:w-[200px] py-2 bg-black text-white rounded-lg hover:bg-slate-500 focus:outline-none mx-auto"
         >
-        Submit
+        Publish
         </button>
         {status && (
         <p className={`mt-4 ${status.includes('successful') ? 'text-green-500' : 'text-red-500'}`}>
