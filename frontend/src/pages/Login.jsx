@@ -29,46 +29,53 @@ const Login = () => {
     <>
     <div className="flex items-center justify-between px-6 md:px-[200px] py-4">
         <h1 className="text-lg md:text-xl font-extrabold"><Link to="/">Blog Market</Link></h1>
-        <h3><Link to="/register">Register</Link></h3>
+        <h3 className="flex items-center">
+          <Link to="/register" className="flex items-center cursor-pointer hover:bg-gray-200 hover:shadow-md hover:rounded-full p-2">
+          <i className="fas fa-user-plus"></i>
+          </Link>
+        </h3>
     </div>
     <div className="flex items-center justify-center h-[80vh] min-h-screen bg-white ">
       <div className="w-full max-w-sm p-8 bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
-        <form>
-          <div className="mb-4">
+        <h1 className="text-2xl font-bold mb-6 text-center font-serif">Sign in with email</h1>
+        <form className="flex flex-col items-center justify-center">
+          <div className="mb-4 w-full">
             <input
               onChange={(e)=>setEmail(e.target.value)}
               type="email"
               id="email"
               name="email"
-              placeholder="Enter your email"
-              className="w-full px-4 py-2 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="email"
+              className="w-full px-4 py-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200"
               required
             />
           </div>
-          <div className="mb-6">
+          <div className="mb-4 w-full">
             <input
               onChange={(e)=>setPassword(e.target.value)}
               type="password"
               id="password"
               name="password"
-              placeholder="Enter your password"
-              className="w-full px-4 py-2 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="password"
+              className="w-full px-4 py-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200"
               required
             />
           </div>
           <button
             onClick={handleLogin}
             type="submit"
-            className="w-full py-2 bg-black text-white rounded-lg hover:bg-slate-500 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            className="w-[100px] mb-3 py-2 bg-black text-white rounded-3xl hover:bg-slate-500 focus:outline-none focus:ring-2 focus:ring-gray-200"
           >
             Login
           </button>
         </form>
         {error && <p className="text-red-500 text-center">Error logging in</p>}
         <div className="flex justify-center items-center space-x-3">
-        <p>New here?</p>
-        <p className="text-gray-500 hover:text-black"><Link to="/register">Register</Link></p>
+        <p className="text-gray-500 hover:text-black">
+          <Link to="/register">
+            <i className="fas fa-user-plus"></i>
+          </Link>
+        </p>
         </div>
       </div>
     </div>

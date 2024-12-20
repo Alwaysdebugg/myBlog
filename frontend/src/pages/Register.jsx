@@ -3,6 +3,7 @@ import Footer from "../components/Footer"
 import { useState } from "react"
 import { register } from "../services/api"
 import { useNavigate } from "react-router-dom"
+import { IoMdLogIn } from "react-icons/io"
 
 const Register = () => {
   const [username,setUsername] = useState('')
@@ -32,7 +33,7 @@ const Register = () => {
     <>
     <div className="flex items-center justify-between px-6 md:px-[200px] py-4">
         <h1 className="text-lg md:text-xl font-extrabold"><Link to="/">Blog Market</Link></h1>
-        <h3><Link to="/Login">Login</Link></h3>
+        <h3><Link to="/Login" className="flex items-center">Login<IoMdLogIn/></Link></h3>
     </div>
     <div className="flex items-center justify-center h-[80vh] min-h-screen bg-white">
       <div className="w-full max-w-sm p-8 bg-white rounded-lg shadow-md">
