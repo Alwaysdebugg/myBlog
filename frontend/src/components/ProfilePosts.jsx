@@ -24,14 +24,7 @@ const ProfilePosts = () => {
         </div>
       </div>
       <p className="text-sm md:text-lg">
-North America offers diverse fishing environments, from freshwater lakes and rivers to coastal saltwater. Research the specific bodies of water you'll be fishing in to understand the local species, seasonal patterns, and fishing regulations.
-Tailor your fishing gear to the type of fishing you'll be doing. For freshwater fishing, consider a medium-action rod and reel combo. For saltwater fishing, heavier gear may be necessary. 
-Ensure you have the appropriate lures or baits for the species you're targeting.
-Different fish species have varying habits. Learn about the feeding patterns and preferred habitats of your target species. For example, bass are often found near structures like submerged rocks or vegetation, while trout prefer cooler, clear water.
-Local fishing forums, guides, and bait shops can provide valuable insights into current fishing conditions and hotspots. Don’t hesitate to ask for advice from experienced anglers in the area.
-Practice Patience and Technique: Fishing requires patience and skill. Pay attention to your casting technique, the retrieve speed, and how you present your bait. Practice makes perfect, so spend time honing your skills.
-Adhere to local fishing regulations, including size and bag limits, to ensure sustainable fishing practices and protect fish populations. Always check the latest rules before heading out.
-Safety is paramount. Wear a life jacket when fishing from a boat, and be aware of weather conditions. Bring necessary safety equipment, including a first-aid kit, and inform someone of your fishing plans.
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
       </p>
       </div>
 

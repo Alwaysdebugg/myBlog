@@ -71,6 +71,7 @@ const Login = () => {
         </form>
         {error && <p className="text-red-500 text-center">Error logging in</p>}
         <div className="flex justify-center items-center space-x-3">
+        <p className="text-gray-500 hover:text-black">Don&apos;t have an account?</p>
         <p className="text-gray-500 hover:text-black">
           <Link to="/register">
             <i className="fas fa-user-plus"></i>
