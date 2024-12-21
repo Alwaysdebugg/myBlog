@@ -41,7 +41,7 @@ const Home = () => {
     <>
     <Navbar/>
     { loading ? <div className="flex justify-center items-center min-h-[40vh]"><Loader/></div> :
-    <div className="px-8 md:px-[200px] py-8 min-h-[80vh]">
+    <div className="px-8 md:px-[200px] py-8 min-h-[80vh] dark:bg-gray-900">
       {blog.map((blog)=>(
         <>
         <Link to={user?`/posts/post/${blog._id}`:`/login`}>

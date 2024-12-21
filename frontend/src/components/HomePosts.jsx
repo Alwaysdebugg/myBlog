@@ -6,8 +6,8 @@ const HomePosts = ({blog}) => {
 
   return (
     <div className="w-full flex mt-8 space-x-4">
-        <div className="flex w-full space-x-4">
-          <div className="w-[35%] h-[200px] flex justify-center items-center">
+        <div className="flex w-full space-x-4 bg-gray-100 p-2 rounded-lg shadow-sm">
+          <div className="w-[35%] h-[200px] flex justify-center items-center shadow-lg">
             <img 
               src={IF+blog.photo} 
               alt={blog.title}

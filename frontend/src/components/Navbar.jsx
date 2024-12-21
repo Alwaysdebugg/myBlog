@@ -1,5 +1,5 @@
 import { Link,useNavigate } from "react-router-dom"
-import { FaSearch,FaBars,FaRegEdit } from "react-icons/fa";
+import { FaSearch,FaBars,FaRegEdit,FaMoon } from "react-icons/fa";
 import { IoMdLogIn } from "react-icons/io";
 import { useState,useContext } from "react";
 import Menu from "./menu";
@@ -15,10 +15,16 @@ const Navbar = () => {
     setMenu(!menu)
   }
   const {user} = useContext(UserContext)
+
+  // 切换暗模式
+  const toggleDarkMode = () => {
+    document.documentElement.classList.toggle('dark');
+  };
+
   return (
-    <div className="flex items-center justify-between px-6 md:px-[200px] py-4">
+    <div className="flex items-center justify-between px-6 md:px-[200px] py-4 dark:bg-gray-800">
       <h1 className="text-lg md:text-xl font-extrabold font-serif">
-        <Link to="/">Blog Market</Link>
+        <Link to="/" className="dark:text-white">Blog Market</Link>
       </h1>
       {pathname === '/' && (
       <div className="flex justify-center items-center space-x-2 bg-gray-100 p-2 rounded-full shadow-sm">
@@ -33,25 +39,29 @@ const Navbar = () => {
         />
       </div>
       )}
-
-      <div className="hidden md:flex items-center justify-center space-x-2 md:space-x-4">
+      <div className="flex items-center justify-center space-x-2">
+        <div className="hidden md:flex items-center justify-center space-x-2">
         {user? 
-        <h3><Link to="/write" className="flex justify-center items-center cursor-pointer hover:bg-gray-200 hover:shadow-md hover:rounded-full p-2"><span className="mr-2">write</span><FaRegEdit/></Link></h3> :
-        <h3><Link to="/login" className="flex items-center cursor-pointer hover:bg-gray-200 hover:shadow-md hover:rounded-full p-2">Login<IoMdLogIn/></Link></h3>
+        <h3><Link to="/write" className="flex justify-center items-center cursor-pointer hover:bg-gray-200 hover:shadow-md hover:rounded-full p-2"><span className="mr-2 dark:text-white">Write</span><FaRegEdit className="dark:text-white"/></Link></h3> :
+        <h3><Link to="/login" className="flex items-center cursor-pointer hover:bg-gray-200 hover:shadow-md hover:rounded-full p-2"><span className="mr-2 dark:text-white">Login</span><IoMdLogIn className="dark:text-white"/></Link></h3>
         }
         {user &&
         <div onClick={showMenu}>
         <p className="cursor-pointer relative hover:bg-gray-200 hover:shadow-md hover:rounded-full p-2">
-          <FaBars />
+          <FaBars className="dark:text-white"/>
         </p>
         {menu && <Menu/>}
         </div>}
       </div>
       <div onClick={showMenu} className="md:hidden text-lg">
         <p className="cursor-pointer relative hover:bg-gray-200 hover:shadow-md hover:rounded-full p-2">
-          <FaBars />
+          <FaBars className="dark:text-white"/>
         </p>
         {menu && <Menu/>}
+      </div>
+      <button onClick={toggleDarkMode} className="p-2 bg-gray-200 dark:bg-gray-800 rounded">
+        <FaMoon className="dark:text-white"/>
+      </button>
       </div>
     </div>
 

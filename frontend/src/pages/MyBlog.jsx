@@ -31,8 +31,12 @@ const MyBlog = () => {
     return (
         <>
         <Navbar/>
+        <div className="flex flex-col items-center justify-center min-h-[80vh] dark:bg-gray-900">
+        <div className="flex justify-center items-center px-8 md:px-[200px] mt-8">
+            <h1 className="text-2xl md:text-3xl font-bold font-serif dark:text-white">My Blog</h1>
+        </div>
         { loading ? <div className="flex justify-center items-center min-h-[40vh]"><Loader/></div> :
-        <div className="px-8 md:px-[200px] py-8 min-h-[80vh]">
+        <div className="px-8 md:px-[200px] py-4 min-h-[80vh]">
           {blog.map((blog)=>(
             <>
             <Link to={`/posts/post/${blog._id}`}>
@@ -42,6 +46,7 @@ const MyBlog = () => {
           ))}
         </div>
         }
+        </div>
         <Footer/>
         </>
     )

@@ -69,7 +69,7 @@ const CreatePost = () => {
   return (
     <div>
         <Navbar/>
-        <div className="px-6 md:px-[200px] mt-8">
+        <div className="px-6 md:px-[200px] mt-8 min-h-[80vh] dark:bg-gray-900">
         <div className="flex justify-center items-center">
             <h1 className="font-bold md:text-2xl text-xl font-serif">Something New?</h1>
         </div>
