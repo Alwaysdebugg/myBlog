@@ -22,7 +22,7 @@ const Menu = () => {
             {!user && <h3 className="text-white text-sm hover:text-gray-400 cursor-pointer" onClick={()=>navigate('/register')}>Register</h3>}
             {/* {user && <h3 className="text-white text-sm hover:text-gray-400 cursor-pointer" onClick={()=>navigate('/write')}>Write</h3>} */}
             {user && <h3 className="text-white text-sm hover:text-gray-400 cursor-pointer" onClick={()=>navigate('/profile')}>Profile</h3>}
-            {user && <h3 className="text-white text-sm hover:text-gray-400 cursor-pointer" onClick={()=>navigate('/myblogs')}>My blogs</h3>}
+            {user && <h3 className="text-white text-sm hover:text-gray-400 cursor-pointer" onClick={()=>navigate('/my-blog')}>My blogs</h3>}
             {user && <h3 className="text-white text-sm hover:text-gray-400 cursor-pointer" onClick={handleLogout}>Logout</h3>}
         </div>
     )

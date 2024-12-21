@@ -36,8 +36,18 @@ export const fetchBlogPosts = async (search) => {
         throw error
     }
 }
+//Get Posts by User ID
+export const getPostsByUserId = async (userId) => {
+    try{
+        const response = await api.get(`/posts/user/${userId}`)
+        return response.data
+    }catch(error){
+        console.error("Error fetching posts by user", error)
+        throw error
+    }
+}
 
-// Get Blog Post by ID
+// Get Blog Post by post ID
 export const fetchBlogPostById = async (id) => {
     try{
         const response = await api.get(`/posts/${id}`)

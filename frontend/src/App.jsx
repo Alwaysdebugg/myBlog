@@ -8,6 +8,7 @@ import PostDetails from './pages/PostDetails';
 import EditPost from './pages/EditPost'
 import Profile from './pages/Profile'
 import { UserProvider } from './context/UserContext'
+import MyBlog from './pages/MyBlog'
 const App = () => {
   return (
     <UserProvider>
@@ -19,6 +20,7 @@ const App = () => {
         <Route exact path="/edit/:id" element={<EditPost/>}/>
         <Route exact path="/profile" element={<Profile/>}/>
         <Route exact path="/posts/post/:id" element={<PostDetails/>}/>
+        <Route exact path="/my-blog" element={<MyBlog/>}/>
       </Routes>
     </UserProvider>
   )
