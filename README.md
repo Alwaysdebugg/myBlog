@@ -15,6 +15,8 @@ The following stack is being used in this project:
 - **Frontend:** React, context api, Tailwind CSS  
 - **Backend:** Node.js, Express  
 - **Database:** MongoDB   
+- **Rich Text Editor:** ReactQuill
+- **Version Control:** Git
 
 ## 💻 Getting Started
 To run this project locally, follow the steps below:
@@ -30,9 +32,16 @@ To run this project locally, follow the steps below:
    npm install
    ```
 
-3. Start the development server:
+3. Frontend: start client:
    ```bash
+   cd frontend
    npm run dev
+   ```
+
+4. Backend: start server:
+   ```bash
+   cd backend
+   npm run start-dev
    ```
     
 
