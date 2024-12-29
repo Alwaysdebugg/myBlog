@@ -12,7 +12,7 @@
 ## 🔧 Technologies
 The following stack is being used in this project:
 
-- **Frontend:** React, Redux, Tailwind CSS  
+- **Frontend:** React, context api, Tailwind CSS  
 - **Backend:** Node.js, Express  
 - **Database:** MongoDB   
 

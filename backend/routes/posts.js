@@ -52,7 +52,7 @@ router.get('/',async(req,res)=>{
     }
 })  
 
-//Get USER POSTS
+//Get POSTS by USER ID
 router.get('/user/:userId',async(req,res)=>{
     try{
         const posts = await Post.find({userId:req.params.userId})
@@ -62,17 +62,6 @@ router.get('/user/:userId',async(req,res)=>{
         res.status(500).json(err)
     }
 })
-
-// //Search post
-// router.get('/search/:searchTerm',async(req,res)=>{
-//     try{
-//         const posts = await Post.find({title:{$regex:req.params.searchTerm,$options:"i"}})
-//         res.status(200).json(posts)
-//     }
-//     catch(err){
-//         res.status(500).json(err)
-//     }
-// })
 
 //Delete post
 router.delete('/:id',verifyToken,async(req,res)=>{

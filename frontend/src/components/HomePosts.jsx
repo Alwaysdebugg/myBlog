@@ -1,6 +1,36 @@
 /* eslint-disable react/prop-types */
 import { IF } from '../url'
+
 const HomePosts = ({blog}) => {
+  // Helper function to strip HTML tags and get plain text
+  const stripHtml = (html) => {
+    if (!html) return '';
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || '';
+  };
+
+  // Get post excerpt: if excerpt exists use it, otherwise generate from content
+  const getExcerpt = (content, maxLength = 200) => {
+    const plainText = stripHtml(content);
+    if (!plainText) return '';
+    
+    // If text is shorter than maxLength, return as is
+    if (plainText.length <= maxLength) return plainText;
+    
+    // Find the last complete sentence within maxLength
+    const truncated = plainText.substring(0, maxLength);
+    const lastPeriod = truncated.lastIndexOf('。');
+    const lastQuestion = truncated.lastIndexOf('？');
+    const lastExclamation = truncated.lastIndexOf('！');
+    
+    // Get the last sentence end position
+    const lastSentenceEnd = Math.max(lastPeriod, lastQuestion, lastExclamation);
+    
+    // If we found a sentence end, use it; otherwise use the full truncated text
+    return lastSentenceEnd !== -1 
+      ? truncated.substring(0, lastSentenceEnd + 1)
+      : truncated + '...';
+  };
 
   if(!blog) return <div className="flex justify-center items-center h-[30vh]">Loading...</div>
 
@@ -32,11 +62,10 @@ const HomePosts = ({blog}) => {
                  WebkitBoxOrient: 'vertical', 
                  overflow: 'hidden' 
                }}>
-              {blog.desc}
+              {blog.excerpt || getExcerpt(blog.desc)}
             </p>
           </div>
         </div>
-
     </div>
   )
 }

@@ -47,7 +47,7 @@ export const getPostsByUserId = async (userId) => {
     }
 }
 
-// Get Blog Post by post ID
+// Get Post Details by Post ID
 export const fetchBlogPostById = async (id) => {
     try{
         const response = await api.get(`/posts/${id}`)

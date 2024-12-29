@@ -15,8 +15,7 @@ const Home = () => {
   const queryParams = new URLSearchParams(search);
   const query = queryParams.get("search"); // 提取特定查询参数
   const {user} = useContext(UserContext)
-  console.log('user',user)
-  console.log('query',query)
+
   const fetchPosts = async()=>{
     setLoading(true)
     try{
@@ -27,16 +26,17 @@ const Home = () => {
       } else {
         setNoResult(false)
       }
-      console.log('Blog list',res)
     }catch(err){
       setLoading(true)
       console.log('Error fetching blog posts in home',err)
     }
     setLoading(false)
   }
+  
   useEffect(()=>{
     fetchPosts()
   },[query])
+
   return (
     <>
     <Navbar/>

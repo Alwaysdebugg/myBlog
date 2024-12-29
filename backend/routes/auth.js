@@ -33,9 +33,7 @@ router.post("/register",async(req,res)=>{
 
 
 //LOGIN
-// 用户登录路由
 router.post('/login', async (req, res) => {
-    // 登录逻辑
     try{
         const user = await User.findOne({email:req.body.email})
         if(!user){
@@ -44,7 +42,7 @@ router.post('/login', async (req, res) => {
         const match = await bcrypt.compare(req.body.password,user.password)
 
         if(!match){
-            return res.status(401).json({msg:"wrong password", password:req.body.password,userPassword:user.password,match:match,user:user})
+            return res.status(401).json({msg:"wrong password", password:req.body.password,match:match,user:user})
         }
 
         const token = jwt.sign({_id:user._id,username:user.username,email:user.email},process.env.JWT_SECRET,{expiresIn:"3d"})

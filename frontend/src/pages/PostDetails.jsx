@@ -12,6 +12,7 @@ import { IF } from "../url"
 import { useNavigate } from "react-router-dom"
 import { deleteBlogPostById } from "../services/api"
 import { fetchCommentsByPostId,postComment } from "../services/api"
+import DOMPurify from 'dompurify'
 
 const PostDetails = () => {
   const {id:postId} = useParams()
@@ -21,6 +22,16 @@ const PostDetails = () => {
   const [commentList,setCommentList] = useState([])
   const [comment,setComment] = useState('')
   const navigate = useNavigate()
+
+  // Function to sanitize and render HTML content
+  const createMarkup = (html) => {
+    const sanitizedHtml = DOMPurify.sanitize(html, {
+      ALLOWED_TAGS: ['h1', 'h2', 'p', 'br', 'strong', 'em', 'ul', 'ol', 'li', 'hr'],
+      ALLOWED_ATTR: []
+    });
+    return { __html: sanitizedHtml };
+  };
+
   const fetchPost = async()=>{
     setLoading(true)
     try{
@@ -32,6 +43,7 @@ const PostDetails = () => {
       throw err
     }
   }
+
   const fetchComments = async()=>{
     setLoading(true)
     try{
@@ -43,6 +55,7 @@ const PostDetails = () => {
       console.log(err)
     }
   }
+
   const handlePostComment = async()=>{
     try{
       const res = await postComment(comment, user.username, postId, user._id)
@@ -78,38 +91,56 @@ const PostDetails = () => {
       {loading? <div className="flex justify-center items-center h-[80vh] w-full"><Loader/></div>:
       <div className="px-8 py-8 md:px-[200px] dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center">
-        <img 
+          <img 
             src={IF + postDetails.photo} 
             alt={postDetails.title} 
             className="w-auto h-[50vh] rounded-lg"
-        />
+          />
         </div>
         <div className="flex justify-between items-center mt-4">
-            <h1 className="text-2xl font-bold font-serif text-black md:text-3xl dark:text-white">{postDetails.title}</h1>
-            {user && user._id === postDetails.userId && (
+          <h1 className="text-2xl font-bold font-serif text-black md:text-3xl dark:text-white">{postDetails.title}</h1>
+          {user && user._id === postDetails.userId && (
             <div className="flex items-center justify-center space-x-2">
-                <p className="cursor-pointer" onClick={()=>navigate("/edit/"+postId)}><BiEdit className="dark:text-white"/></p>
-                <p className="cursor-pointer" onClick={()=>deletePost(postId)}><MdDelete className="dark:text-white"/></p>
+              <p className="cursor-pointer" onClick={()=>navigate("/edit/"+postId)}><BiEdit className="dark:text-white"/></p>
+              <p className="cursor-pointer" onClick={()=>deletePost(postId)}><MdDelete className="dark:text-white"/></p>
             </div>
-            )}
+          )}
         </div>
         <div className="flex items-center justify-start mt-4 space-x-2">
-            <p className="text-sm dark:text-white">@{postDetails.username}</p>
-            <span className="text-sm text-gray-500 dark:text-gray-400">•</span>
-            <p className="text-sm text-gray-500 dark:text-gray-400">{new Date(postDetails.updatedAt).toLocaleDateString()}</p>
-            <span className="text-sm text-gray-500 dark:text-gray-400">•</span>
-            <p className="text-sm text-gray-500 dark:text-gray-400">{new Date(postDetails.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+          <p className="text-sm dark:text-white">@{postDetails.username}</p>
+          <span className="text-sm text-gray-500 dark:text-gray-400">•</span>
+          <p className="text-sm text-gray-500 dark:text-gray-400">{new Date(postDetails.updatedAt).toLocaleDateString()}</p>
+          <span className="text-sm text-gray-500 dark:text-gray-400">•</span>
+          <p className="text-sm text-gray-500 dark:text-gray-400">{new Date(postDetails.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
         </div>
-        <p className="mx-auto mt-8 text-lg leading-relaxed dark:text-white font-serif">{postDetails.desc}</p>
+        <div 
+          className="prose prose-lg max-w-none mt-8 dark:prose-invert font-serif dark:text-white"
+          dangerouslySetInnerHTML={createMarkup(postDetails.desc)}
+          style={{
+            '--tw-prose-headings': 'var(--tw-prose-invert-headings)',
+            'h1': {
+              fontSize: '2em',
+              marginTop: '1.5em',
+              marginBottom: '0.5em',
+              lineHeight: '1.3',
+            },
+            'h2': {
+              fontSize: '1.5em',
+              marginTop: '1.3em',
+              marginBottom: '0.5em',
+              lineHeight: '1.3',
+            }
+          }}
+        />
         <div className="flex items-center mt-8 mb-4 space-x-4 font-semibold">
-            <p className="dark:text-white text-sm">Categories:</p>
-            <div className="flex justify-center items-center space-x-2">
-              { postDetails.categories && postDetails.categories.map((category,index)=>(
-                <div className="bg-gray-400 rounded-lg px-3 py-1 text-sm dark:bg-gray-800 dark:text-white" key={index}>
-                  {category.charAt(0).toUpperCase() + category.slice(1)}
-                </div>
-              ))}
-            </div>
+          <p className="dark:text-white text-sm">Categories:</p>
+          <div className="flex justify-center items-center space-x-2">
+            {postDetails.categories && postDetails.categories.map((category,index)=>(
+              <div className="bg-gray-400 rounded-lg px-3 py-1 text-sm dark:bg-gray-800 dark:text-white" key={index}>
+                {category.charAt(0).toUpperCase() + category.slice(1)}
+              </div>
+            ))}
+          </div>
         </div>
         <div className="w-full flex items-center space-x-2 bg-white rounded-full shadow-md p-2 dark:bg-gray-800">
           <input 
