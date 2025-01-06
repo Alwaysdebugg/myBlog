@@ -1,13 +1,13 @@
  Welcome to **Medium Clone**! This project is a **work in progress** 🛠️ and aims to recreate the core features of [Medium](https://medium.com), providing a clean and user-friendly blogging platform.
 
 ## 🚀 Features (Planned)
-- **User Authentication:** Login and signup functionality.  
-- **Post Management:** Create, edit, and delete blog posts.  
-- **Rich Text Editor:** Write beautifully formatted content.  
-- **Responsive Design:** Optimized for desktop and mobile devices.  
-- **Tagging System:** Add tags to your posts for better discoverability.  
-- **Comment Section:** Engage readers with comments.  
-- **Dark Mode:** A theme toggle for user preference.  
+- **User Authentication:** Login and signup functionality - Done 
+- **Post Management:** Create, edit, and delete blog posts - Done
+- **Rich Text Editor:** Write beautifully formatted content
+- **Responsive Design:** Optimized for desktop and mobile devices
+- **Tagging System:** Add tags to your posts for better discoverability - Done
+- **Comment Section:** Engage readers with comments - Done
+- **Dark Mode:** A theme toggle for user preference - Done
 
 ## 🔧 Technologies
 The following stack is being used in this project:
