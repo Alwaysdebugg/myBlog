@@ -15,7 +15,6 @@ export const UserProvider = ({children}) => {
                 if(token){
                     const res = await loggedIn()
                     setUser(res)
-                    console.log(res,"usercontext")
                 }
             }catch(err){
                 console.log("Error fetching user", err)
@@ -25,7 +24,7 @@ export const UserProvider = ({children}) => {
         checkLoggedIn()
     },[])
 
-    return(
+    return (
         <UserContext.Provider value={{user,setUser}}>
             {children}
         </UserContext.Provider>

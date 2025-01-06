@@ -11,7 +11,65 @@ const Register = () => {
   const [email,setEmail] = useState('')
   const [password,setPassword] = useState('')
   const [error,setError] = useState(false)
+  const [errorMessage,setErrorMessage] = useState("")
   const navigate = useNavigate()
+  const [emailError, setEmailError] = useState("")
+  const [usernameError, setUsernameError] = useState("")
+  const [passwordError, setPasswordError] = useState("")
+
+  // 用户名验证
+  const validateUsername = (username) => {
+    const usernameRegex = /^.{4,}$/
+    return usernameRegex.test(username)
+  }
+
+  const handleUsernameChange = (e) => {
+    const usernameValue = e.target.value
+    if (!usernameValue) {
+      setUsernameError("Username cannot be empty")
+    } else if (!validateUsername(usernameValue)) {
+      setUsernameError("must be at least 4 characters")
+    } else {
+      setUsernameError("")
+      setUsername(usernameValue)
+    }
+  }
+
+  // 邮箱验证
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
+  const handleEmailChange = (e) => {
+    const emailValue = e.target.value
+    if (!emailValue) {
+      setEmailError("Email cannot be empty")
+    } else if (!validateEmail(emailValue)) {
+      setEmailError("Please enter a valid email address")
+    } else {
+      setEmailError("")
+      setEmail(emailValue)
+    }
+  }
+
+  // 密码验证
+  const validatePassword = (password) => {
+    const passwordRegex = /^.{4,}$/
+    return passwordRegex.test(password)
+  }
+
+  const handlePasswordChange = (e) => {
+    const passwordValue = e.target.value
+    if (!passwordValue) {
+      setPasswordError("Password cannot be empty")
+    } else if (!validatePassword(passwordValue)) {
+      setPasswordError("must be at least 4 characters")
+    } else {
+      setPasswordError("")
+      setPassword(passwordValue)
+    }
+  }
 
   const handleRegister = async()=>{
     event.preventDefault()
@@ -25,6 +83,11 @@ const Register = () => {
       console.log(res)
     }catch(err){
       console.log("Error registering", err)
+      if(err.status === 400){
+        setErrorMessage("Email already exists")
+      }else{
+        setErrorMessage("Can not register")
+      }
       setError(true)
     }
   }
@@ -47,11 +110,11 @@ const Register = () => {
     </div>
     <div className="flex items-center justify-center h-[80vh] min-h-screen bg-white dark:bg-gray-900">
       <div className="w-full max-w-sm p-8 bg-white rounded-lg shadow-md dark:bg-gray-900">
-        <h1 className="text-2xl font-bold mb-6 text-center font-serif dark:text-white">Sign up with email</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center font-serif dark:text-white">Sign up</h1>
         <form className="flex flex-col items-center justify-center">
         <div className="mb-4 w-full">
             <input
-              onChange={(e)=>setUsername(e.target.value)}
+              onChange={handleUsernameChange}
               type="Username"
               id="Username"
               name="Username"
@@ -59,10 +122,11 @@ const Register = () => {
               className="w-full px-4 py-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 dark:bg-gray-800 dark:text-white"
               required
             />
+            {usernameError && <p className="text-red-500 text-center">{usernameError}</p>}
           </div>
           <div className="mb-4 w-full">
             <input
-              onChange={(e)=>setEmail(e.target.value)}
+              onChange={handleEmailChange}
               type="email"
               id="email"
               name="email"
@@ -70,10 +134,11 @@ const Register = () => {
               className="w-full px-4 py-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 dark:bg-gray-800 dark:text-white"
               required
             />
+            {emailError && <p className="text-red-500 text-center">{emailError}</p>}
           </div>
           <div className="mb-4 w-full">
             <input
-              onChange={(e)=>setPassword(e.target.value)}
+              onChange={handlePasswordChange}
               type="password"
               id="password"
               name="password"
@@ -81,6 +146,7 @@ const Register = () => {
               className="w-full px-4 py-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 dark:bg-gray-800 dark:text-white"
               required
             />
+            {passwordError && <p className="text-red-500 text-center">{passwordError}</p>}
           </div>
           <button
             onClick={handleRegister}
@@ -90,7 +156,7 @@ const Register = () => {
           <span className="font-light font-serif">sign up</span>
           </button>
         </form>
-        {error && <p className="text-red-500 text-center">Error registering</p>}
+        {error && <p className="text-red-500 text-center">{errorMessage}</p>}
         <div className="flex justify-center items-center space-x-3">
         <p className="text-gray-500 hover:text-black">Already have a account?</p>
         <p className="text-gray-500 hover:text-black"><Link to="/Login"><IoMdLogIn/></Link></p>
