@@ -1,8 +1,8 @@
 import { Link,useNavigate } from "react-router-dom"
 import { FaSearch,FaBars,FaRegEdit,FaMoon } from "react-icons/fa";
 import { IoMdLogIn } from "react-icons/io";
-import { useState,useContext } from "react";
-import Menu from "./menu";
+import { useState,useContext,useEffect } from "react";
+import Menu from "./Menu";
 import { UserContext } from "../context/UserContext";
 import { useLocation } from "react-router-dom";
 const Navbar = () => {
@@ -10,11 +10,22 @@ const Navbar = () => {
   const [prompt,setPrompt] = useState('')
   const navigate = useNavigate()
   const {pathname} = useLocation()
+  const {user} = useContext(UserContext)
 
-  const showMenu = () => {
+  const handleMenuClick = (e) => {
+    e.stopPropagation()
+    console.log(menu)
     setMenu(!menu)
   }
-  const {user} = useContext(UserContext)
+  useEffect(() => {
+  if (menu) {
+    document.addEventListener('click', handleOutsideClick)
+  }
+ }, [menu])
+ 
+  const handleOutsideClick = () => {
+    if (menu) setMenu(false)
+  }
 
   // 切换暗模式
   const toggleDarkMode = () => {
@@ -22,7 +33,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex items-center justify-between px-6 md:px-[200px] py-4 dark:bg-gray-800">
+    <div onClick={handleOutsideClick} className="flex items-center justify-between px-6 md:px-[200px] py-4 dark:bg-gray-800">
       <h1 className="text-lg md:text-xl font-extrabold font-serif">
         <Link to="/" className="dark:text-white">Blog Market</Link>
       </h1>
@@ -45,20 +56,25 @@ const Navbar = () => {
         <h3><Link to="/write" className="flex justify-center items-center cursor-pointer hover:bg-gray-200 hover:shadow-md hover:rounded-full p-2"><span className="mr-2 dark:text-white">Write</span><FaRegEdit className="dark:text-white"/></Link></h3> :
         <h3><Link to="/login" className="flex items-center cursor-pointer hover:bg-gray-200 hover:shadow-md hover:rounded-full p-2"><span className="mr-2 dark:text-white">Login</span><IoMdLogIn className="dark:text-white"/></Link></h3>
         }
-        {user &&
-        <div onClick={showMenu}>
-        <p className="cursor-pointer relative hover:bg-gray-200 hover:shadow-md hover:rounded-full p-2">
-          <FaBars className="dark:text-white"/>
-        </p>
-        {menu && <Menu/>}
-        </div>}
+        {user && (
+            <div className="relative">
+                <p onClick={handleMenuClick} 
+                   className="cursor-pointer relative hover:bg-gray-200 hover:shadow-md hover:rounded-full p-2">
+                    <FaBars className="dark:text-white"/>
+                </p>
+                {menu && <Menu setMenu={setMenu} navigate={navigate}/>}
+            </div>
+        )}
       </div>
-      <div onClick={showMenu} className="md:hidden text-lg">
-        <p className="cursor-pointer relative hover:bg-gray-200 hover:shadow-md hover:rounded-full p-2">
-          <FaBars className="dark:text-white"/>
+      {!user && (
+        <div className="md:hidden text-lg">
+        <p onClick={handleMenuClick} 
+           className="cursor-pointer relative hover:bg-gray-200 hover:shadow-md hover:rounded-full p-2">
+            <FaBars className="dark:text-white"/>
         </p>
-        {menu && <Menu/>}
+        {menu && <Menu setMenu={setMenu} navigate={navigate}/>}
       </div>
+      )}
       <button onClick={toggleDarkMode} className="p-2 bg-gray-200 dark:bg-gray-800 rounded">
         <FaMoon className="dark:text-white"/>
       </button>
